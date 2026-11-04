@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laís Oliveira - Catálogo & Curadoria</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                    },
+                    colors: {
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                            950: '#0c0a09',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #fafaf9; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+        .glass-nav {
+            background: rgba(250, 250, 249, 0.90);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .minimal-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .minimal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -10px rgba(28, 25, 23, 0.07);
+            border-color: #d6d3d1;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+            .minimal-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #e7e5e4 !important; }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 font-sans antialiased selection:bg-stone-900 selection:text-white pb-28">
+
+    <!-- Top Admin Notice Banner -->
+    <div id="adminBanner" class="hidden no-print bg-stone-900 text-stone-100 px-4 py-3 border-b border-stone-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5">
+                <span class="bg-amber-300 text-stone-950 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-widest text-[10px]">Modo Edição</span>
+                <span class="text-stone-300">Edite preços, logo, banners, fotos e descrições. Seus clientes não verão os custos quando você sair deste modo.</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="openAddProductModal()" class="bg-white hover:bg-stone-100 text-stone-900 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Novo Produto
+                </button>
+                <button onclick="openBannerModal()" class="bg-stone-800 hover:bg-stone-700 text-stone-100 border border-stone-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition">
+                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Editar Banners
+                </button>
+                <button onclick="resetCatalogDefaults()" class="text-stone-400 hover:text-red-300 px-2.5 py-1.5 rounded-full text-xs transition" title="Restaurar catálogo padrão">
+                    Restaurar Padrão
+                </button>
+                <button onclick="toggleAdminMode()" class="bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-500/30 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i> Bloquear Painel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimalist Header -->
+    <header class="glass-nav border-b border-stone-200/80 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand / Logo Area -->
+            <div class="flex items-center gap-3.5">
+                <div id="logoContainer" onclick="handleSecretLogoClick()" class="w-11 h-11 rounded-full bg-stone-900 text-stone-50 flex items-center justify-center font-serif text-lg font-semibold tracking-wider overflow-hidden shrink-0 border border-stone-200 cursor-pointer select-none" title="Laís Oliveira">
+                    <span id="logoTextDisplay">LO</span>
+                    <img id="logoImgDisplay" src="" alt="Logo" class="w-full h-full object-cover hidden">
+                </div>
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <h1 id="storeNameDisplay" class="font-serif text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">Laís Oliveira</h1>
+                        <span class="hidden sm:inline-block text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-stone-200/70 text-stone-700 font-medium">
+                            Curadoria Oficial
+                        </span>
+                    </div>
+                    <p id="storeSubtitleDisplay" class="text-xs text-stone-500 font-light tracking-wide">Perfumaria, Beleza & Tecnologia Seleção Exclusiva</p>
+                </div>
+            </div>
+
+            <!-- Search & Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Search Desktop -->
+                <div class="relative hidden md:block w-60 lg:w-72 no-print">
+                    <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Buscar fragrância, gloss, fone..." class="w-full pl-9 pr-4 py-2 bg-stone-100/90 hover:bg-stone-100 focus:bg-white rounded-full text-xs border border-stone-200/80 focus:border-stone-900 focus:outline-none transition">
+                </div>
+                <!-- Botão Personalizar -->
+                <button id="adminToggleBtn" onclick="requestAdminAccess()" class="hidden no-print items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium border border-stone-900 bg-stone-900 text-white transition" title="Sair do Modo Edição">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    <span id="adminBtnText">Sair da Edição</span>
+                </button>
+                <!-- Print/PDF -->
+                <button onclick="window.print()" class="no-print hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border border-stone-200 bg-white hover:border-stone-400 text-stone-600 transition" title="Gerar PDF">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                </button>
+                <!-- Shopping Bag Button -->
+                <button onclick="toggleCartDrawer(true)" class="no-print relative flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white px-4 py-2 rounded-full text-xs font-medium transition">
+                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Sacola</span>
+                    <span id="headerCartBadge" class="bg-stone-100 text-stone-900 font-bold text-[11px] px-1.5 py-0.2 rounded-full min-w-[18px] text-center">0</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-3 no-print">
+            <div class="relative w-full">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input type="text" id="searchInputMobile" oninput="handleSearch(this.value)" placeholder="Buscar produto no catálogo..." class="w-full pl-9 pr-4 py-2 bg-stone-100 focus:bg-white rounded-full text-xs border border-stone-200 focus:border-stone-900 focus:outline-none">
+            </div>
+        </div>
+    </header>
+
+    <!-- Editable Promotional Banners Carousel / Grid -->
+    <section id="promoBannersSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div id="bannersContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <!-- Dynamically rendered by JS -->
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-10">
+        
+        <!-- Admin Financial Simulator Bar -->
+        <div id="adminMetricsBar" class="hidden no-print bg-white border border-stone-300 rounded-2xl p-5 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-100">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-900 flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-stone-700"></i> Painel de Controle e Margens (Oculto para seus clientes)
+                    </h3>
+                    <p class="text-xs text-stone-500 mt-0.5">Altere valores diretamente nos produtos ou clique no ícone de lápis em qualquer item para trocar fotos e descrições.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="applyBulkDiscount(5)" class="px-3 py-1.5 rounded-full text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 transition">-5% Geral</button>
+                    <button onclick="applyBulkDiscount(-5)" class="px-3 py-1.5 rounded-full text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 transition">+5% Geral</button>
+                    <button onclick="exportCatalogShareLink()" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-stone-900 hover:bg-stone-800 text-white flex items-center gap-1.5 transition">
+                        <i data-lucide="check" class="w-3.5 h-3.5"></i> Concluir Edição
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200/60">
+                    <span class="text-[10px] text-stone-400 uppercase tracking-wider font-semibold">Itens no Catálogo</span>
+                    <p id="metricTotalItems" class="text-lg font-bold text-stone-900 mt-0.5">0</p>
+                </div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200/60">
+                    <span class="text-[10px] text-stone-400 uppercase tracking-wider font-semibold">Custo Médio</span>
+                    <p id="metricAvgCost" class="text-lg font-bold text-stone-700 mt-0.5">R$ 0,00</p>
+                </div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200/60">
+                    <span class="text-[10px] text-stone-500 uppercase tracking-wider font-semibold">Lucro Médio / Item</span>
+                    <p id="metricAvgProfit" class="text-lg font-bold text-emerald-700 mt-0.5">R$ 0,00</p>
+                </div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200/60">
+                    <span class="text-[10px] text-stone-500 uppercase tracking-wider font-semibold">Margem Média</span>
+                    <p id="metricAvgMargin" class="text-lg font-bold text-stone-900 mt-0.5">0%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Minimalist Category Navigation & Sorting -->
+        <div class="no-print flex items-center justify-between gap-4 flex-wrap border-b border-stone-200 pb-4">
+            <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto" id="categoryPills">
+                <button onclick="filterCategory('all')" data-cat="all" class="cat-btn active px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-stone-900 text-white">
+                    Todos
+                </button>
+                <button onclick="filterCategory('decants')" data-cat="decants" class="cat-btn px-4 py-2 rounded-full text-xs font-medium transition whitespace-nowrap bg-transparent text-stone-600 hover:bg-stone-200/60">
+                    Perfumaria & Decants
+                </button>
+                <button onclick="filterCategory('beauty')" data-cat="beauty" class="cat-btn px-4 py-2 rounded-full text-xs font-medium transition whitespace-nowrap bg-transparent text-stone-600 hover:bg-stone-200/60">
+                    Maquiagem & Autocuidado
+                </button>
+                <button onclick="filterCategory('tech')" data-cat="tech" class="cat-btn px-4 py-2 rounded-full text-xs font-medium transition whitespace-nowrap bg-transparent text-stone-600 hover:bg-stone-200/60">
+                    Tecnologia & Áudio
+                </button>
+            </div>
+            <div class="flex items-center gap-2 ml-auto">
+                <span class="text-xs text-stone-400">Ordenar por:</span>
+                <select id="sortSelect" onchange="handleSort(this.value)" class="bg-transparent border border-stone-200 rounded-full px-3 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:border-stone-900">
+                    <option value="featured">Destaques</option>
+                    <option value="price-asc">Menor valor</option>
+                    <option value="price-desc">Maior valor</option>
+                    <option value="name-asc">Nome (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Product Sections Container -->
+        <div id="catalogContainer" class="space-y-14"></div>
+
+        <!-- Minimalist Footer -->
+        <footer class="border-t border-stone-200/80 pt-8 pb-12 text-center space-y-2 text-xs text-stone-400">
+            <p class="font-serif text-base text-stone-700 font-medium" id="footerStoreName">Laís Oliveira</p>
+            <p>Produtos 100% originais selecionados a dedo • Pedidos direto via WhatsApp</p>
+            <div class="pt-3 no-print">
+                <button onclick="requestAdminAccess()" class="inline-flex items-center gap-1 text-[11px] text-stone-300 hover:text-stone-500 transition" title="Acesso Restrito da Vendedora">
+                    <i data-lucide="lock" class="w-3 h-3"></i> Área da Vendedora
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Floating Bottom Bag Bar -->
+    <div id="floatingCartBar" class="fixed bottom-5 inset-x-4 max-w-2xl mx-auto z-40 hidden no-print">
+        <div class="bg-stone-900/95 backdrop-blur-md text-white px-5 py-3.5 rounded-full shadow-xl border border-stone-700 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-white text-stone-900 flex items-center justify-center font-bold text-xs" id="floatingCartCount">0</span>
+                <div>
+                    <p class="text-[11px] text-stone-400 leading-none">Total estimado</p>
+                    <p class="text-sm font-semibold text-white mt-0.5" id="floatingCartTotal">R$ 0,00</p>
+                </div>
+            </div>
+            <button onclick="toggleCartDrawer(true)" class="bg-white hover:bg-stone-100 text-stone-950 font-semibold text-xs px-4 py-2 rounded-full flex items-center gap-2 transition">
+                <span>Finalizar no WhatsApp</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Slide-over Bag Drawer -->
+    <div id="cartDrawerBackdrop" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-stone-950/40 backdrop-blur-xs z-50 hidden transition-opacity"></div>
+    <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col no-print">
+        <div class="p-6 border-b border-stone-100 flex items-center justify-between">
+            <div>
+                <h3 class="font-serif text-2xl font-semibold text-stone-900">Sua Sacola</h3>
+                <p class="text-xs text-stone-400">Revise seus itens para enviar à Laís Oliveira</p>
+            </div>
+            <button onclick="toggleCartDrawer(false)" class="p-2 rounded-full hover:bg-stone-100 text-stone-500 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-3"></div>
+        <div class="p-6 border-t border-stone-100 bg-stone-50/70 space-y-4">
+            <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-500 mb-1">Seu Nome</label>
+                <input type="text" id="customerNameInput" placeholder="Como podemos te chamar?" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs bg-white focus:outline-none focus:border-stone-900">
+            </div>
+            <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-500 mb-1">Preferência de Pagamento</label>
+                <select id="paymentMethodInput" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs bg-white focus:outline-none focus:border-stone-900">
+                    <option value="PIX">PIX</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="A combinar">A combinar no WhatsApp</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-stone-200/80">
+                <span class="text-xs font-medium text-stone-500">Total do Pedido</span>
+                <span id="drawerCartTotal" class="font-serif text-2xl font-bold text-stone-900">R$ 0,00</span>
+            </div>
+            <div class="space-y-2">
+                <button onclick="sendOrderWhatsApp()" class="w-full py-3 px-4 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-semibold text-xs flex items-center justify-center gap-2 transition">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    Enviar Pedido para Laís Oliveira
+                </button>
+                <button onclick="copyOrderSummary()" class="w-full py-2.5 px-4 rounded-full bg-white hover:bg-stone-100 text-stone-600 border border-stone-200 font-medium text-xs flex items-center justify-center gap-2 transition">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    Copiar Resumo do Pedido
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Store & Logo Settings Modal -->
+    <div id="storeSettingsModal" class="fixed inset-0 bg-stone-950/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                <h3 class="font-serif text-xl font-semibold text-stone-900">Identidade Visual & Contato</h3>
+                <button onclick="closeStoreSettingsModal()" class="text-stone-400 hover:text-stone-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nome da Vendedora / Marca</label>
+                    <input type="text" id="settingStoreName" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-stone-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Subtítulo / Slogan</label>
+                    <input type="text" id="settingStoreSubtitle" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-stone-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">WhatsApp de Recebimento (com DDI e DDD)</label>
+                    <input type="text" id="settingWhatsApp" placeholder="5561933000244" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-stone-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Senha / PIN de Acesso ao Modo Edição</label>
+                    <input type="password" id="settingAdminPin" placeholder="Padrão: 0244" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-stone-900">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">Iniciais Logo</label>
+                        <input type="text" id="settingLogoInitials" maxlength="3" placeholder="LO" class="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-center uppercase">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">URL da Imagem de Logo (Opcional)</label>
+                        <input type="url" id="settingLogoUrl" placeholder="https://..." class="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Ou enviar arquivo de Logo do dispositivo</label>
+                    <input type="file" accept="image/*" onchange="handleFileUpload(this, 'settingLogoUrl')" class="w-full text-xs text-stone-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-3 border-t border-stone-100">
+                <button onclick="closeStoreSettingsModal()" class="px-4 py-2 rounded-full text-xs font-medium text-stone-600 hover:bg-stone-100">Cancelar</button>
+                <button onclick="saveStoreSettings()" class="px-5 py-2 rounded-full text-xs font-semibold bg-stone-900 hover:bg-stone-800 text-white">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin PIN Login Modal -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-stone-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-stone-900 text-white flex items-center justify-center">
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-lg font-semibold text-stone-900">Acesso da Vendedora</h3>
+                        <p class="text-[11px] text-stone-400">Exclusivo para Laís Oliveira</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminLoginModal()" class="text-stone-400 hover:text-stone-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-stone-700">Digite sua Senha (PIN)</label>
+                <input type="password" id="adminPinInput" onkeydown="if(event.key === 'Enter') verifyAdminPin()" placeholder="...." class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-center text-lg tracking-widest font-bold focus:outline-none focus:border-stone-900">
+                <p id="adminPinError" class="text-[11px] text-red-600 text-center hidden">Senha incorreta. Tente novamente.</p>
+                <p class="text-[11px] text-stone-400 text-center">Senha padrão inicial: <strong>0244</strong></p>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeAdminLoginModal()" class="px-4 py-2 rounded-full text-xs font-medium text-stone-600 hover:bg-stone-100">Cancelar</button>
+                <button onclick="verifyAdminPin()" class="px-5 py-2 rounded-full text-xs font-semibold bg-stone-900 hover:bg-stone-800 text-white">Desbloquear Painel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotional Banners Editor Modal -->
+    <div id="bannerModal" class="fixed inset-0 bg-stone-950/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-5 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                <div>
+                    <h3 class="font-serif text-xl font-semibold text-stone-900">Gerenciar Banners & Destaques</h3>
+                    <p class="text-xs text-stone-500">Destaque promoções da semana, kits ou produtos mais vendidos no topo do catálogo.</p>
+                </div>
+                <button onclick="closeBannerModal()" class="text-stone-400 hover:text-stone-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Banner 1 -->
+            <div class="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-800">Banner Principal</span>
+                    <label class="flex items-center gap-1.5 text-xs text-stone-600 cursor-pointer">
+                        <input type="checkbox" id="ban1Active" class="rounded text-stone-900"> Exibir Banner
+                    </label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-medium text-stone-600 mb-1">Selo Superior (Tag)</label>
+                        <input type="text" id="ban1Tag" class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-stone-600 mb-1">Texto do Botão / Ação</label>
+                        <input type="text" id="ban1Cta" class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs bg-white">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-medium text-stone-600 mb-1">Título Principal</label>
+                        <input type="text" id="ban1Title" class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs bg-white font-semibold">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-medium text-stone-600 mb-1">Subtítulo / Descrição da Promoção</label>
+                        <textarea id="ban1Desc" rows="2" class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs bg-white"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-stone-600 mb-1">Filtro ao Clicar</label>
+                        <select id="ban1LinkCat" class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs bg-white">
+                            <option value="all">Ver Todos os Produtos</option>
+                            <option value="decants">Ir para Perfumaria & Decants</option>
+                            <option value="beauty">Ir para Maquiagem & Autocuidado</option>
+                            <option value="tech">Ir para Tecnologia & Áudio</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-stone-600 mb-1">Imagem de Fundo (URL ou Upload)</label>
+                        <input type="text" id="ban1Img" placeholder="Deixe vazio p/ fundo escuro" class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs bg-white">
+                        <input type="file" accept="image/*" onchange="handleFileUpload(this, 'ban1Img')" class="mt-1 w-full text-[11px] text-stone-500">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-3 border-t border-stone-100">
+                <button onclick="closeBannerModal()" class="px-4 py-2 rounded-full text-xs font-medium text-stone-600 hover:bg-stone-100">Cancelar</button>
+                <button onclick="saveBannersModal()" class="px-5 py-2 rounded-full text-xs font-semibold bg-stone-900 hover:bg-stone-800 text-white">Salvar Banners</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add / Edit Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-stone-950/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                <h3 id="productModalTitle" class="font-serif text-xl font-semibold text-stone-900">Editar Produto</h3>
+                <button onclick="closeProductModal()" class="text-stone-400 hover:text-stone-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <input type="hidden" id="editProdId">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nome do Produto</label>
+                    <input type="text" id="editProdName" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Categoria</label>
+                    <select id="editProdCategory" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs bg-white">
+                        <option value="decants">Perfumaria & Decants</option>
+                        <option value="beauty">Maquiagem & Autocuidado</option>
+                        <option value="tech">Tecnologia & Áudio</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Etiqueta / Detalhe</label>
+                    <input type="text" id="editProdBadge" placeholder="Ex: 5ml, Mais Vendido" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-900 mb-1">Preço de Venda (R$)</label>
+                    <input type="number" step="0.50" id="editProdPrice" class="w-full px-3.5 py-2 rounded-xl border border-stone-400 text-xs font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-400 mb-1">Preço "De R$" (Opcional)</label>
+                    <input type="number" step="0.50" id="editProdOldPrice" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-500 mb-1">Seu Custo Base R$ (Oculto)</label>
+                    <input type="number" step="0.50" id="editProdCost" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 bg-stone-50 text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Disponibilidade</label>
+                    <select id="editProdStock" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs bg-white">
+                        <option value="Pronta Entrega">Pronta Entrega</option>
+                        <option value="Últimas Unidades">Últimas Unidades</option>
+                        <option value="Sob Encomenda">Sob Encomenda</option>
+                        <option value="Esgotado">Esgotado</option>
+                    </select>
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Descrição e Notas</label>
+                    <textarea id="editProdDesc" rows="3" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs"></textarea>
+                </div>
+                <div class="sm:col-span-2 space-y-1.5">
+                    <label class="block text-xs font-semibold text-stone-700">Imagem do Produto (Link URL ou Foto do seu Celular/PC)</label>
+                    <input type="text" id="editProdImgUrl" placeholder="Cole o link da imagem ou envie abaixo" class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs">
+                    <div class="flex items-center justify-between gap-2 pt-1">
+                        <input type="file" accept="image/*" onchange="handleFileUpload(this, 'editProdImgUrl')" class="text-xs text-stone-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-medium file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center pt-3 border-t border-stone-100">
+                <button id="deleteProdBtn" onclick="deleteProduct()" class="px-3 py-2 rounded-full text-xs font-medium text-red-600 hover:bg-red-50">Excluir</button>
+                <div class="flex gap-2 ml-auto">
+                    <button onclick="closeProductModal()" class="px-4 py-2 rounded-full text-xs font-medium text-stone-600 hover:bg-stone-100">Cancelar</button>
+                    <button onclick="saveProductModal()" class="px-5 py-2 rounded-full text-xs font-semibold bg-stone-900 hover:bg-stone-800 text-white">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimal Toast Notification -->
+    <div id="toastNotification" class="fixed top-24 right-4 z-50 transform translate-x-full opacity-0 transition-all duration-300 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2 text-xs font-medium no-print">
+        <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+        <span id="toastMessage">Salvo com sucesso</span>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO PADRÃO
+        const DEFAULT_STORE_CONFIG = {
+            name: "Laís Oliveira",
+            subtitle: "Perfumaria, Beleza & Tecnologia Curadoria Exclusiva",
+            whatsapp: "5561933000244",
+            logoInitials: "LO",
+            logoUrl: "",
+            adminPin: "0244"
+        };
+
+        const DEFAULT_BANNERS = {
+            ban1Active: true,
+            ban1Tag: "Destaque da Semana • Pronta Entrega",
+            ban1Title: "Kits de Decants, Beleza & Tecnologia com Preço Especial",
+            ban1Desc: "Experimente perfumes importados em versões de bolso (5ml), garanta os cosméticos mais desejados do momento e acessórios originais. Faça seu pedido direto pelo WhatsApp.",
+            ban1Cta: "Explorar Destaques",
+            ban1LinkCat: "decants",
+            ban1Img: ""
+        };
+
+        const DEFAULT_PRODUCTS = [
+            {
+                id: "dec-kit-masc",
+                category: "decants",
+                name: "Discovery Kit Masculino 3 Decants à Escolha (3x 5ml)",
+                badge: "Combo 3x 5ml • ~225 Borrifadas",
+                price: 74.90,
+                oldPrice: 89.90,
+                cost: 24.50,
+                stock: "Pronta Entrega",
+                artType: "kit-masc",
+                customImage: "",
+                description: "Monte seu trio com 3 fragrâncias masculinas importadas em frascos de vidro de 5ml com spray."
+            },
+            {
+                id: "dec-custom-5ml",
+                category: "decants",
+                name: "Decant Perfume Importado Feminino ou Masculino 5ml",
+                badge: "5ml (~75 borrifadas) Frasco de Vidro",
+                price: 28.00,
+                oldPrice: 35.00,
+                cost: 8.50,
+                stock: "Pronta Entrega",
+                artType: "decant-clean",
+                customImage: "",
+                description: "Frasco portátil de 5ml com perfume 100% original extraído diretamente do frasco oficial."
+            },
+            {
+                id: "bea-vs-splash",
+                category: "beauty",
+                name: "Body Splash Victoria's Secret 250ml (Original)",
+                badge: "250ml • Várias Fragrâncias",
+                price: 120.00,
+                oldPrice: 149.00,
+                cost: 53.00,
+                stock: "Pronta Entrega",
+                artType: "vs-splash",
+                customImage: "",
+                description: "Perfumação leve e deliciosa para o dia a dia. Fragrâncias: Bare Vanilla, Pure Seduction, Love Spell."
+            },
+            {
+                id: "tech-redmi-buds",
+                category: "tech",
+                name: "Fone Bluetooth Xiaomi Redmi Buds 6 Play / 4 Active",
+                badge: "Original Xiaomi • Bateria 36h",
+                price: 115.00,
+                oldPrice: 149.00,
+                cost: 48.00,
+                stock: "Pronta Entrega",
+                artType: "redmi-buds",
+                customImage: "",
+                description: "Leve, discreto e com som nítido. Possui Bluetooth 5.4, resistência a suor e estojo compacto."
+            }
+        ];
+
+        // ESTADO DA APLICAÇÃO
+        let storeConfig = JSON.parse(localStorage.getItem('lais_catalog_store_v2')) || DEFAULT_STORE_CONFIG;
+        let bannersConfig = JSON.parse(localStorage.getItem('lais_catalog_banners_v2')) || DEFAULT_BANNERS;
+        let products = JSON.parse(localStorage.getItem('lais_catalog_products_v2')) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+        let cart = JSON.parse(localStorage.getItem('lais_catalog_cart_v2')) || {};
+        let isAdminMode = false;
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let currentSort = 'featured';
+
+        // INICIALIZAÇÃO IMEDIATA (Resolve a galeria em branco)
+        document.addEventListener("DOMContentLoaded", () => {
+            initApp();
+        });
+
+        function initApp() {
+            updateStoreHeaderUI();
+            renderBanners();
+            renderCatalog();
+            updateCartUI();
+            lucide.createIcons();
+        }
+
+        function saveProductsState() {
+            localStorage.setItem('lais_catalog_products_v2', JSON.stringify(products));
+            updateAdminMetrics();
+        }
+
+        function updateStoreHeaderUI() {
+            document.getElementById('storeNameDisplay').textContent = storeConfig.name;
+            document.getElementById('footerStoreName').textContent = storeConfig.name;
+            document.title = `${storeConfig.name} - Catálogo & Curadoria`;
+            const logoContainer = document.getElementById('logoContainer');
+            const logoText = document.getElementById('logoTextDisplay');
+            const logoImg = document.getElementById('logoImgDisplay');
+            if (storeConfig.logoUrl && storeConfig.logoUrl.trim() !== '') {
+                logoImg.src = storeConfig.logoUrl;
+                logoImg.classList.remove('hidden');
+                logoText.classList.add('hidden');
+            } else {
+                logoImg.classList.add('hidden');
+                logoText.classList.remove('hidden');
+                logoText.textContent = storeConfig.logoInitials || 'LO';
+            }
+        }
+
+        // SEGREDOS E ADMINISTRAÇÃO
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+        function handleSecretLogoClick() {
+            if (isAdminMode) {
+                openStoreSettingsModal();
+                return;
+            }
+            logoClickCount++;
+            clearTimeout(logoClickTimer);
+            if (logoClickCount >= 3) {
+                logoClickCount = 0;
+                requestAdminAccess();
+            } else {
+                logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 900);
+            }
+        }
+
+        function requestAdminAccess() {
+            if (isAdminMode) {
+                toggleAdminMode();
+                return;
+            }
+            const modal = document.getElementById('adminLoginModal');
+            const input = document.getElementById('adminPinInput');
+            const err = document.getElementById('adminPinError');
+            input.value = '';
+            err.classList.add('hidden');
+            modal.classList.remove('hidden');
+            setTimeout(() => input.focus(), 80);
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        }
+
+        function verifyAdminPin() {
+            const typed = document.getElementById('adminPinInput').value.trim();
+            const validPin = (storeConfig.adminPin || '0244').trim();
+            if (typed === validPin) {
+                closeAdminLoginModal();
+                toggleAdminMode();
+            } else {
+                document.getElementById('adminPinError').classList.remove('hidden');
+            }
+        }
+
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
+            const banner = document.getElementById('adminBanner');
+            const metricsBar = document.getElementById('adminMetricsBar');
+            const btn = document.getElementById('adminToggleBtn');
+            if (isAdminMode) {
+                banner.classList.remove('hidden');
+                metricsBar.classList.remove('hidden');
+                btn.classList.remove('hidden');
+                btn.classList.add('flex');
+                showToast("Painel da Vendedora desbloqueado!");
+            } else {
+                banner.classList.add('hidden');
+                metricsBar.classList.add('hidden');
+                btn.classList.add('hidden');
+                btn.classList.remove('flex');
+                showToast("Painel bloqueado. Visão do cliente ativa!");
+            }
+            renderBanners();
+            renderCatalog();
+        }
+
+        // RENDERIZAÇÃO DE BANNERS
+        function renderBanners() {
+            const container = document.getElementById('bannersContainer');
+            container.innerHTML = '';
+            if (bannersConfig.ban1Active) {
+                const div1 = document.createElement('div');
+                div1.className = "col-span-full rounded-3xl bg-stone-900 text-stone-100 p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden shadow-sm";
+                if (bannersConfig.ban1Img) {
+                    div1.style.backgroundImage = `linear-gradient(rgba(28,25,23,0.85), rgba(28,25,23,0.9)), url('${bannersConfig.ban1Img}')`;
+                    div1.style.backgroundSize = 'cover';
+                    div1.style.backgroundPosition = 'center';
+                }
+                div1.innerHTML = `
+                    <div class="space-y-3 z-10 max-w-xl">
+                        <span class="inline-block text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-white/10 text-stone-200 font-semibold">${bannersConfig.ban1Tag}</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-white">${bannersConfig.ban1Title}</h2>
+                        <p class="text-xs sm:text-sm text-stone-300 font-light leading-relaxed">${bannersConfig.ban1Desc}</p>
+                    </div>
+                    <div class="mt-8 flex items-center gap-3 z-10">
+                        <button onclick="filterCategory('${bannersConfig.ban1LinkCat}')" class="bg-white hover:bg-stone-100 text-stone-950 font-semibold text-xs px-6 py-3 rounded-full flex items-center gap-2 transition">
+                            <span>${bannersConfig.ban1Cta}</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                        ${isAdminMode ? '<button onclick="openBannerModal()" class="bg-stone-800/80 hover:bg-stone-700 text-white px-3 py-2.5 rounded-full text-xs flex items-center gap-1 border border-stone-700"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Editar Banners</button>' : ''}
+                    </div>
+                `;
+                container.appendChild(div1);
+                document.getElementById('promoBannersSection').classList.remove('hidden');
+            } else {
+                document.getElementById('promoBannersSection').classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        // RENDERIZAÇÃO DA GALERIA DE PRODUTOS
+        function renderCatalog() {
+            const container = document.getElementById('catalogContainer');
+            container.innerHTML = '';
+            let filtered = products.filter(p => {
+                const matchesCat = (activeCategory === 'all' || p.category === activeCategory);
+                const q = searchQuery.toLowerCase();
+                const matchesQuery = p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.badge.toLowerCase().includes(q);
+                return matchesCat && matchesQuery;
+            });
+
+            filtered.sort((a, b) => {
+                if (currentSort === 'price-asc') return a.price - b.price;
+                if (currentSort === 'price-desc') return b.price - a.price;
+                if (currentSort === 'name-asc') return a.name.localeCompare(b.name);
+                return 0;
+            });
+
+            const categoriesToRender = activeCategory === 'all'
+                ? [
+                    { id: 'decants', name: 'Perfumaria & Decants', desc: 'Fragrâncias importadas em frascos de 5ml e Discovery Kits' },
+                    { id: 'beauty', name: 'Maquiagem & Autocuidado', desc: 'Itens virais e tratamentos de alta performance' },
+                    { id: 'tech', name: 'Tecnologia & Áudio', desc: 'Periféricos e áudio originais de alto giro' }
+                  ]
+                : [
+                    {
+                        id: activeCategory,
+                        name: activeCategory === 'decants' ? 'Perfumaria & Decants' : activeCategory === 'beauty' ? 'Maquiagem & Autocuidado' : 'Tecnologia & Áudio',
+                        desc: ''
+                    }
+                  ];
+
+            let hasAnyResult = false;
+            categoriesToRender.forEach(catMeta => {
+                const catProducts = filtered.filter(p => p.category === catMeta.id);
+                if (catProducts.length === 0) return;
+                hasAnyResult = true;
+
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = "space-y-6";
+
+                const headerDiv = document.createElement('div');
+                headerDiv.className = "flex items-end justify-between border-b border-stone-200 pb-3";
+                headerDiv.innerHTML = `
+                    <div>
+                        <h2 class="font-serif text-2xl font-semibold text-stone-900">${catMeta.name}</h2>
+                        ${catMeta.desc ? `<p class="text-xs text-stone-500 mt-0.5">${catMeta.desc}</p>` : ''}
+                    </div>
+                    <span class="text-xs text-stone-400 font-medium">${catProducts.length} itens</span>
+                `;
+                sectionDiv.appendChild(headerDiv);
+
+                const gridDiv = document.createElement('div');
+                gridDiv.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6";
+                catProducts.forEach(prod => {
+                    gridDiv.appendChild(createProductCard(prod));
+                });
+                sectionDiv.appendChild(gridDiv);
+                container.appendChild(sectionDiv);
+            });
+
+            if (!hasAnyResult) {
+                container.innerHTML = `
+                    <div class="text-center py-20 space-y-3">
+                        <i data-lucide="search-x" class="w-12 h-12 mx-auto text-stone-300"></i>
+                        <h3 class="font-serif text-xl font-semibold text-stone-800">Nenhum produto encontrado</h3>
+                        <p class="text-xs text-stone-500">Tente buscar por outro termo ou limpe os filtros.</p>
+                        <button onclick="resetFilters()" class="px-4 py-2 rounded-full text-xs font-semibold bg-stone-900 text-white">Ver Todos</button>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+            updateAdminMetrics();
+        }
+
+        function createProductCard(prod) {
+            const card = document.createElement('div');
+            card.className = "minimal-card bg-white rounded-2xl border border-stone-200/90 overflow-hidden flex flex-col justify-between relative group";
+            const qtyInCart = cart[prod.id] || 0;
+            const profit = prod.price - prod.cost;
+            const margin = Math.round((profit / (prod.cost || 1)) * 100);
+
+            let imageHtml = `<div class="w-full h-full flex items-center justify-center bg-stone-100 text-stone-400 text-xs font-medium">Foto do Produto</div>`;
+            if (prod.customImage && prod.customImage.trim() !== '') {
+                imageHtml = `<img src="${prod.customImage}" alt="${prod.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500">`;
+            }
+
+            card.innerHTML = `
+                <div>
+                    <div class="aspect-square w-full bg-stone-100 relative overflow-hidden">
+                        <span class="absolute top-3 left-3 z-10 text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full bg-stone-900/90 text-white backdrop-blur-xs">
+                            ${prod.badge}
+                        </span>
+                        ${isAdminMode ? `<button onclick="openEditProductModal('${prod.id}')" class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-amber-300 text-stone-950 flex items-center justify-center shadow-md hover:bg-amber-400 transition" title="Editar Produto"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>` : ''}
+                        ${imageHtml}
+                    </div>
+                    <div class="p-5 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-medium text-stone-500">${prod.stock}</span>
+                            <span class="text-[11px] text-stone-400">${prod.category === 'decants' ? 'Decant / Frasco' : 'Original'}</span>
+                        </div>
+                        <h3 class="font-serif text-lg font-semibold text-stone-900 leading-snug line-clamp-2">${prod.name}</h3>
+                        <p class="text-xs text-stone-500 font-light line-clamp-2 leading-relaxed">${prod.description}</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 space-y-3">
+                    ${isAdminMode ? `
+                        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/70 space-y-2 no-print">
+                            <div class="flex items-center justify-between text-[11px] text-amber-900 font-semibold">
+                                <span>Lucro: R$ ${profit.toFixed(2).replace('.', ',')}</span>
+                                <span class="bg-amber-200 px-1.5 py-0.5 rounded text-[10px]">+${margin}%</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[9px] uppercase font-bold text-stone-500 mb-0.5">Venda R$</label>
+                                    <input type="number" step="0.5" value="${prod.price}" onchange="quickUpdatePrice('${prod.id}', 'price', this.value)" class="w-full px-2 py-1 bg-white border border-amber-300 rounded text-xs font-bold text-stone-900">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] uppercase font-bold text-stone-400 mb-0.5">Custo R$</label>
+                                    <input type="number" step="0.5" value="${prod.cost}" onchange="quickUpdatePrice('${prod.id}', 'cost', this.value)" class="w-full px-2 py-1 bg-white border border-amber-300 rounded text-xs text-stone-600">
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="flex items-baseline justify-between pt-2 border-t border-stone-100">
+                        <div>
+                            ${prod.oldPrice ? `<span class="text-[11px] text-stone-400 line-through block">R$ ${prod.oldPrice.toFixed(2).replace('.', ',')}</span>` : ''}
+                            <span class="font-serif text-2xl font-bold text-stone-900">R$ ${prod.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            ${qtyInCart > 0 ? `
+                                <div class="flex items-center gap-1 bg-stone-100 rounded-full p-1 border border-stone-200">
+                                    <button onclick="changeCartQty('${prod.id}', -1)" class="w-6 h-6 rounded-full bg-white text-stone-900 text-xs font-bold flex items-center justify-center shadow-xs">-</button>
+                                    <span class="text-xs font-semibold px-1.5">${qtyInCart}</span>
+                                    <button onclick="changeCartQty('${prod.id}', 1)" class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs font-bold flex items-center justify-center shadow-xs">+</button>
+                                </div>
+                            ` : `
+                                <button onclick="changeCartQty('${prod.id}', 1)" class="bg-stone-900 hover:bg-stone-800 text-white p-2.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition" title="Adicionar à Sacola">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                    <span class="hidden sm:inline text-[11px]">Adicionar</span>
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // FUNÇÕES AUXILIARES E DE CONTROLE
+        function filterCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn active px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-stone-900 text-white";
+                } else {
+                    btn.className = "cat-btn px-4 py-2 rounded-full text-xs font-medium transition whitespace-nowrap bg-transparent text-stone-600 hover:bg-stone-200/60";
+                }
+            });
+            renderCatalog();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val;
+            renderCatalog();
+        }
+
+        function handleSort(val) {
+            currentSort = val;
+            renderCatalog();
+        }
+
+        function resetFilters() {
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchInputMobile').value = '';
+            filterCategory('all');
+        }
+
+        function quickUpdatePrice(prodId, field, value) {
+            const numVal = parseFloat(value);
+            if (isNaN(numVal) || numVal < 0) return;
+            const prod = products.find(p => p.id === prodId);
+            if (prod) {
+                prod[field] = numVal;
+                saveProductsState();
+                renderCatalog();
+                updateCartUI();
+                showToast("Valor atualizado!");
+            }
+        }
+
+        function applyBulkDiscount(percent) {
+            const factor = 1 - (percent / 100);
+            products.forEach(p => {
+                p.price = Math.round(p.price * factor * 2) / 2;
+            });
+            saveProductsState();
+            renderCatalog();
+            updateCartUI();
+            showToast(percent > 0 ? `Desconto de ${percent}% aplicado!` : `Acréscimo aplicado!`);
+        }
+
+        function updateAdminMetrics() {
+            if (!isAdminMode) return;
+            const totalItems = products.length;
+            const avgCost = products.reduce((acc, p) => acc + p.cost, 0) / (totalItems || 1);
+            const avgProfit = products.reduce((acc, p) => acc + (p.price - p.cost), 0) / (totalItems || 1);
+            const avgMargin = products.reduce((acc, p) => acc + ((p.price - p.cost) / (p.cost || 1)) * 100, 0) / (totalItems || 1);
+            
+            document.getElementById('metricTotalItems').textContent = totalItems;
+            document.getElementById('metricAvgCost').textContent = `R$ ${avgCost.toFixed(2).replace('.', ',')}`;
+            document.getElementById('metricAvgProfit').textContent = `R$ ${avgProfit.toFixed(2).replace('.', ',')}`;
+            document.getElementById('metricAvgMargin').textContent = `${Math.round(avgMargin)}%`;
+        }
+
+        function exportCatalogShareLink() {
+            if (isAdminMode) toggleAdminMode();
+            showToast("Alterações salvas e modo edição ocultado!");
+        }
+
+        function resetCatalogDefaults() {
+            products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+            storeConfig = JSON.parse(JSON.stringify(DEFAULT_STORE_CONFIG));
+            bannersConfig = JSON.parse(JSON.stringify(DEFAULT_BANNERS));
+            localStorage.setItem('lais_catalog_store_v2', JSON.stringify(storeConfig));
+            localStorage.setItem('lais_catalog_banners_v2', JSON.stringify(bannersConfig));
+            saveProductsState();
+            updateStoreHeaderUI();
+            renderBanners();
+            renderCatalog();
+            updateCartUI();
+            showToast("Catálogo restaurado para o padrão de Laís Oliveira!");
+        }
+
+        // GERENCIAMENTO DE PRODUTOS
+        function openEditProductModal(prodId) {
+            const prod = products.find(p => p.id === prodId);
+            if (!prod) return;
+            document.getElementById('productModalTitle').textContent = "Editar Produto";
+            document.getElementById('editProdId').value = prod.id;
+            document.getElementById('editProdName').value = prod.name;
+            document.getElementById('editProdCategory').value = prod.category;
+            document.getElementById('editProdBadge').value = prod.badge;
+            document.getElementById('editProdPrice').value = prod.price;
+            document.getElementById('editProdOldPrice').value = prod.oldPrice || '';
+            document.getElementById('editProdCost').value = prod.cost;
+            document.getElementById('editProdStock').value = prod.stock;
+            document.getElementById('editProdDesc').value = prod.description;
+            document.getElementById('editProdImgUrl').value = prod.customImage || '';
+            document.getElementById('deleteProdBtn').classList.remove('hidden');
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function openAddProductModal() {
+            document.getElementById('productModalTitle').textContent = "Novo Produto";
+            document.getElementById('editProdId').value = '';
+            document.getElementById('editProdName').value = '';
+            document.getElementById('editProdCategory').value = 'decants';
+            document.getElementById('editProdBadge').value = '5ml (~75 borrifadas)';
+            document.getElementById('editProdPrice').value = '29.90';
+            document.getElementById('editProdOldPrice').value = '38.00';
+            document.getElementById('editProdCost').value = '9.00';
+            document.getElementById('editProdStock').value = 'Pronta Entrega';
+            document.getElementById('editProdDesc').value = '';
+            document.getElementById('editProdImgUrl').value = '';
+            document.getElementById('deleteProdBtn').classList.add('hidden');
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        function saveProductModal() {
+            const id = document.getElementById('editProdId').value;
+            const name = document.getElementById('editProdName').value.trim();
+            const category = document.getElementById('editProdCategory').value;
+            const badge = document.getElementById('editProdBadge').value.trim() || 'Destaque';
+            const price = parseFloat(document.getElementById('editProdPrice').value) || 0;
+            const oldPrice = parseFloat(document.getElementById('editProdOldPrice').value) || 0;
+            const cost = parseFloat(document.getElementById('editProdCost').value) || 0;
+            const stock = document.getElementById('editProdStock').value;
+            const description = document.getElementById('editProdDesc').value.trim();
+            const customImage = document.getElementById('editProdImgUrl').value.trim();
+
+            if (!name) {
+                showToast("Informe o nome do produto.");
+                return;
+            }
+
+            if (id) {
+                const idx = products.findIndex(p => p.id === id);
+                if (idx > -1) {
+                    products[idx] = { ...products[idx], name, category, badge, price, oldPrice, cost, stock, description, customImage };
+                }
+            } else {
+                products.unshift({
+                    id: 'prod-' + Date.now(),
+                    name, category, badge, price, oldPrice, cost, stock, description, customImage,
+                    artType: 'decant-clean'
+                });
+            }
+            saveProductsState();
+            closeProductModal();
+            renderCatalog();
+            updateCartUI();
+            showToast("Produto salvo com sucesso!");
+        }
+
+        function deleteProduct() {
+            const id = document.getElementById('editProdId').value;
+            products = products.filter(p => p.id !== id);
+            delete cart[id];
+            saveProductsState();
+            closeProductModal();
+            renderCatalog();
+            updateCartUI();
+            showToast("Produto removido.");
+        }
+
+        // MODAL DE CONFIGURAÇÕES DA LOJA
+        function openStoreSettingsModal() {
+            document.getElementById('settingStoreName').value = storeConfig.name;
+            document.getElementById('settingStoreSubtitle').value = storeConfig.subtitle;
+            document.getElementById('settingWhatsApp').value = storeConfig.whatsapp;
+            document.getElementById('settingAdminPin').value = storeConfig.adminPin || '0244';
+            document.getElementById('settingLogoInitials').value = storeConfig.logoInitials || 'LO';
+            document.getElementById('settingLogoUrl').value = storeConfig.logoUrl || '';
+            document.getElementById('storeSettingsModal').classList.remove('hidden');
+        }
+
+        function closeStoreSettingsModal() {
+            document.getElementById('storeSettingsModal').classList.add('hidden');
+        }
+
+        function saveStoreSettings() {
+            storeConfig.name = document.getElementById('settingStoreName').value.trim() || DEFAULT_STORE_CONFIG.name;
+            storeConfig.subtitle = document.getElementById('settingStoreSubtitle').value.trim() || DEFAULT_STORE_CONFIG.subtitle;
+            storeConfig.whatsapp = document.getElementById('settingWhatsApp').value.replace(/\D/g, '') || DEFAULT_STORE_CONFIG.whatsapp;
+            storeConfig.adminPin = document.getElementById('settingAdminPin').value.trim() || '0244';
+            storeConfig.logoInitials = document.getElementById('settingLogoInitials').value.trim() || 'LO';
+            storeConfig.logoUrl = document.getElementById('settingLogoUrl').value.trim();
+
+            localStorage.setItem('lais_catalog_store_v2', JSON.stringify(storeConfig));
+            updateStoreHeaderUI();
+            closeStoreSettingsModal();
+            showToast("Dados, Logo e Senha atualizados!");
+        }
+
+        // MODAL DE BANNERS
+        function openBannerModal() {
+            document.getElementById('ban1Active').checked = bannersConfig.ban1Active;
+            document.getElementById('ban1Tag').value = bannersConfig.ban1Tag;
+            document.getElementById('ban1Title').value = bannersConfig.ban1Title;
+            document.getElementById('ban1Desc').value = bannersConfig.ban1Desc;
+            document.getElementById('ban1Cta').value = bannersConfig.ban1Cta;
+            document.getElementById('ban1LinkCat').value = bannersConfig.ban1LinkCat;
+            document.getElementById('ban1Img').value = bannersConfig.ban1Img;
+            document.getElementById('bannerModal').classList.remove('hidden');
+        }
+
+        function closeBannerModal() {
+            document.getElementById('bannerModal').classList.add('hidden');
+        }
+
+        function saveBannersModal() {
+            bannersConfig.ban1Active = document.getElementById('ban1Active').checked;
+            bannersConfig.ban1Tag = document.getElementById('ban1Tag').value.trim();
+            bannersConfig.ban1Title = document.getElementById('ban1Title').value.trim();
+            bannersConfig.ban1Desc = document.getElementById('ban1Desc').value.trim();
+            bannersConfig.ban1Cta = document.getElementById('ban1Cta').value.trim();
+            bannersConfig.ban1LinkCat = document.getElementById('ban1LinkCat').value;
+            bannersConfig.ban1Img = document.getElementById('ban1Img').value.trim();
+
+            localStorage.setItem('lais_catalog_banners_v2', JSON.stringify(bannersConfig));
+            closeBannerModal();
+            renderBanners();
+            showToast("Banners atualizados com sucesso!");
+        }
+
+        // UPLOAD DE ARQUIVO
+        function handleFileUpload(inputElement, targetInputId) {
+            const file = inputElement.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(targetInputId).value = e.target.result;
+                showToast("Imagem carregada com sucesso!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // SACOLA E WHATSAPP
+        function changeCartQty(prodId, delta) {
+            const current = cart[prodId] || 0;
+            const next = current + delta;
+            if (next <= 0) {
+                delete cart[prodId];
+            } else {
+                cart[prodId] = next;
+            }
+            localStorage.setItem('lais_catalog_cart_v2', JSON.stringify(cart));
+            renderCatalog();
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let totalCount = 0;
+            let totalAmount = 0;
+            const listEl = document.getElementById('cartItemsList');
+            listEl.innerHTML = '';
+
+            Object.keys(cart).forEach(prodId => {
+                const prod = products.find(p => p.id === prodId);
+                if (!prod) {
+                    delete cart[prodId];
+                    return;
+                }
+                const qty = cart[prodId];
+                const sub = prod.price * qty;
+                totalCount += qty;
+                totalAmount += sub;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "flex items-center justify-between gap-3 p-3.5 rounded-xl bg-stone-50 border border-stone-200/70";
+                itemDiv.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-medium text-stone-900 truncate">${prod.name}</p>
+                        <p class="text-[11px] text-stone-400">R$ ${prod.price.toFixed(2).replace('.', ',')} cada</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeCartQty('${prod.id}', -1)" class="w-6 h-6 rounded-full bg-white border border-stone-200 text-xs font-medium">-</button>
+                        <span class="text-xs font-semibold w-4 text-center">${qty}</span>
+                        <button onclick="changeCartQty('${prod.id}', 1)" class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs font-medium">+</button>
+                    </div>
+                    <div class="text-right min-w-[64px]">
+                        <p class="text-xs font-semibold text-stone-900">R$ ${sub.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                `;
+                listEl.appendChild(itemDiv);
+            });
+
+            if (totalCount === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-14 space-y-1.5">
+                        <p class="text-sm font-medium text-stone-500">Sua sacola está vazia</p>
+                        <p class="text-xs text-stone-400 font-light">Selecione os itens desejados para enviar seu pedido.</p>
+                    </div>
+                `;
+            }
+
+            const formattedTotal = `R$ ${totalAmount.toFixed(2).replace('.', ',')}`;
+            document.getElementById('headerCartBadge').textContent = totalCount;
+            document.getElementById('floatingCartCount').textContent = totalCount;
+            document.getElementById('floatingCartTotal').textContent = formattedTotal;
+            document.getElementById('drawerCartTotal').textContent = formattedTotal;
+
+            const floatingBar = document.getElementById('floatingCartBar');
+            if (totalCount > 0) {
+                floatingBar.classList.remove('hidden');
+            } else {
+                floatingBar.classList.add('hidden');
+            }
+        }
+
+        function toggleCartDrawer(open) {
+            const drawer = document.getElementById('cartDrawer');
+            const backdrop = document.getElementById('cartDrawerBackdrop');
+            if (open) {
+                backdrop.classList.remove('hidden');
+                drawer.classList.remove('translate-x-full');
+            } else {
+                backdrop.classList.add('hidden');
+                drawer.classList.add('translate-x-full');
+            }
+        }
+
+        function buildOrderMessage() {
+            const customerName = document.getElementById('customerNameInput').value.trim() || 'Cliente';
+            const payment = document.getElementById('paymentMethodInput').value;
+            let lines = [];
+            lines.push(`Olá, *${storeConfig.name}*! Aqui é *${customerName}*.`);
+            lines.push('Separei estes itens no seu catálogo:');
+            lines.push('');
+            let total = 0;
+            Object.keys(cart).forEach(prodId => {
+                const prod = products.find(p => p.id === prodId);
+                if (!prod) return;
+                const qty = cart[prodId];
+                const sub = prod.price * qty;
+                total += sub;
+                lines.push(`• ${qty}x *${prod.name}* — R$ ${sub.toFixed(2).replace('.', ',')}`);
+            });
+            lines.push('');
+            lines.push(`*Total:* R$ ${total.toFixed(2).replace('.', ',')}`);
+            lines.push(`*Pagamento:* ${payment}`);
+            return lines.join('\n');
+        }
+
+        function sendOrderWhatsApp() {
+            if (Object.keys(cart).length === 0) {
+                showToast("Adicione pelo menos 1 item na sacola.");
+                return;
+            }
+            const msg = encodeURIComponent(buildOrderMessage());
+            const phone = storeConfig.whatsapp || '5561933000244';
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+        }
+
+        function copyOrderSummary() {
+            if (Object.keys(cart).length === 0) {
+                showToast("Sua sacola está vazia.");
+                return;
+            }
+            const text = buildOrderMessage();
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast("Pedido copiado para a área de transferência!");
+        }
+
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('translate-x-full', 'opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
